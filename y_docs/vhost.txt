@@ -1,0 +1,21 @@
+
+#8023 ci-trans
+server {
+        listen       8023;
+        server_name  ts.dev-ts.net;
+        location / {
+			root   E:/www/w_dev/w_dev_fra_laravel/fra-codeigniter-source-chinese-trans/v1.0-3.1.11;
+            index  index.html index.htm index.php;
+			if ( !-e $request_filename) {
+				rewrite ^/(.*)$  /index.php?s=/$1  last;
+				break;
+			} 
+        }
+        location ~ \.php$ {
+            root   E:/www/w_dev/w_dev_fra_laravel/fra-codeigniter-source-chinese-trans/v1.0-3.1.11;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+}
