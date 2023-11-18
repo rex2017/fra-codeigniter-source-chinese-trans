@@ -44,8 +44,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  
 /**
  * Output Class
+ * 输出类
  *
  * Responsible for sending final output to the browser.
+ * 负责发送最终的输出到浏览器
+ * 
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -57,6 +60,7 @@ class CI_Output {
 
 	/**
 	 * Final output string
+	 * 保存输出结果
 	 *
 	 * @var	string
 	 */
@@ -64,6 +68,7 @@ class CI_Output {
 
 	/**
 	 * Cache expiration time
+	 * 缓存生效时间，默认为0
 	 *
 	 * @var	int
 	 */
@@ -71,6 +76,7 @@ class CI_Output {
 
 	/**
 	 * List of server headers
+	 * headers列表
 	 *
 	 * @var	array
 	 */
@@ -78,6 +84,7 @@ class CI_Output {
 
 	/**
 	 * List of mime types
+	 * mimies类型列表
 	 *
 	 * @var	array
 	 */
@@ -85,6 +92,7 @@ class CI_Output {
 
 	/**
 	 * Mime-type for the current page
+	 * text/html类型
 	 *
 	 * @var	string
 	 */
@@ -92,6 +100,7 @@ class CI_Output {
 
 	/**
 	 * Enable Profiler flag
+	 * 保存用户profiler标志位
 	 *
 	 * @var	bool
 	 */
@@ -99,6 +108,7 @@ class CI_Output {
 
 	/**
 	 * php.ini zlib.output_compression flag
+	 * ini开启zlib标志位
 	 *
 	 * @var	bool
 	 */
@@ -106,6 +116,7 @@ class CI_Output {
 
 	/**
 	 * CI output compression flag
+	 * 是否压缩输出标志位
 	 *
 	 * @var	bool
 	 */
@@ -113,6 +124,7 @@ class CI_Output {
 
 	/**
 	 * List of profiler sections
+	 * 保存用户profile的数组
 	 *
 	 * @var	array
 	 */
@@ -129,6 +141,7 @@ class CI_Output {
 
 	/**
 	 * mbstring.func_overload flag
+	 * 函数重载标志位
 	 *
 	 * @var	bool
 	 */
@@ -136,6 +149,7 @@ class CI_Output {
 
 	/**
 	 * Class constructor
+	 * 构造函数
 	 *
 	 * Determines whether zLib output compression will be used.
 	 *
@@ -143,7 +157,9 @@ class CI_Output {
 	 */
 	public function __construct()
 	{
+		// 获取ini对压缩输出的配置
 		$this->_zlib_oc = (bool) ini_get('zlib.output_compression');
+		// 当环境没有开启gzip压缩，但配置文件设置compress_output为TRUE
 		$this->_compress_output = (
 			$this->_zlib_oc === FALSE
 			&& config_item('compress_output') === TRUE
@@ -153,6 +169,7 @@ class CI_Output {
 		isset(self::$func_overload) OR self::$func_overload = (extension_loaded('mbstring') && ini_get('mbstring.func_overload'));
 
 		// Get mime types for later
+		// 获取mimes的类型
 		$this->mimes =& get_mimes();
 
 		log_message('info', 'Output Class Initialized');
@@ -164,6 +181,7 @@ class CI_Output {
 	 * Get Output
 	 *
 	 * Returns the current output string.
+	 * 返回当前的输出
 	 *
 	 * @return	string
 	 */
@@ -178,6 +196,7 @@ class CI_Output {
 	 * Set Output
 	 *
 	 * Sets the output string.
+	 * 设置当前输出
 	 *
 	 * @param	string	$output	Output data
 	 * @return	CI_Output
@@ -208,6 +227,7 @@ class CI_Output {
 
 	/**
 	 * Set Header
+	 * 设置头
 	 *
 	 * Lets you set a server header which will be sent with the final output.
 	 *
@@ -237,6 +257,7 @@ class CI_Output {
 
 	/**
 	 * Set Content-Type Header
+	 * 设置内容头类型
 	 *
 	 * @param	string	$mime_type	Extension of the file we're outputting
 	 * @param	string	$charset	Character set (default: NULL)
@@ -278,6 +299,7 @@ class CI_Output {
 
 	/**
 	 * Get Current Content-Type Header
+	 * 获取内容的类型
 	 *
 	 * @return	string	'text/html', if not already set
 	 */
@@ -298,6 +320,7 @@ class CI_Output {
 
 	/**
 	 * Get Header
+	 * 获取header
 	 *
 	 * @param	string	$header
 	 * @return	string
@@ -332,6 +355,7 @@ class CI_Output {
 
 	/**
 	 * Set HTTP Status Header
+	 * 设置header的状态
 	 *
 	 * As of version 1.7.2, this is an alias for common function
 	 * set_status_header().
@@ -350,6 +374,7 @@ class CI_Output {
 
 	/**
 	 * Enable/disable Profiler
+	 * 是否保存profile
 	 *
 	 * @param	bool	$val	TRUE to enable or FALSE to disable
 	 * @return	CI_Output
@@ -364,6 +389,7 @@ class CI_Output {
 
 	/**
 	 * Set Profiler Sections
+	 * 保存profile
 	 *
 	 * Allows override of default/config settings for
 	 * Profiler section display.
@@ -391,6 +417,7 @@ class CI_Output {
 
 	/**
 	 * Set Cache
+	 * 设置缓存（有效时间）
 	 *
 	 * @param	int	$time	Cache expiration time in minutes
 	 * @return	CI_Output
@@ -405,6 +432,7 @@ class CI_Output {
 
 	/**
 	 * Display Output
+	 * 展示出输出内容，即显示在浏览器上
 	 *
 	 * Processes and sends finalized output data to the browser along
 	 * with any server headers and profile data. It also stops benchmark
@@ -422,10 +450,13 @@ class CI_Output {
 		// Note:  We use load_class() because we can't use $CI =& get_instance()
 		// since this function is sometimes called by the caching mechanism,
 		// which happens before the CI super object is available.
+		// Note: 我们使用load_class而不直接用get_instance()
+		// 因为有时候本方法是被缓存机制调用的，这时候CI超级对象还无法使用
 		$BM =& load_class('Benchmark', 'core');
 		$CFG =& load_class('Config', 'core');
 
 		// Grab the super object if we can.
+		// 如果可能的话，获取超级对象CI
 		if (class_exists('CI_Controller', FALSE))
 		{
 			$CI =& get_instance();
@@ -434,6 +465,7 @@ class CI_Output {
 		// --------------------------------------------------------------------
 
 		// Set the output data
+		// 为属性$output赋值 
 		if ($output === '')
 		{
 			$output =& $this->final_output;
@@ -475,6 +507,7 @@ class CI_Output {
 		// --------------------------------------------------------------------
 
 		// Are there any server headers to send?
+		// 如果headers不为空，则设置为返回到browser的header
 		if (count($this->headers) > 0)
 		{
 			foreach ($this->headers as $header)
@@ -488,6 +521,7 @@ class CI_Output {
 		// Does the $CI object exist?
 		// If not we know we are dealing with a cache file so we'll
 		// simply echo out the data and exit.
+		// 如果$CI变量不存在，是从缓存读取数据，直接读取并退出即可
 		if ( ! isset($CI))
 		{
 			if ($this->_compress_output === TRUE)
@@ -505,6 +539,7 @@ class CI_Output {
 				}
 			}
 
+			// 直接将$output输出
 			echo $output;
 			log_message('info', 'Final output sent to browser');
 			log_message('debug', 'Total execution time: '.$elapsed);
@@ -515,6 +550,7 @@ class CI_Output {
 
 		// Do we need to generate profile data?
 		// If so, load the Profile class and run it.
+		// 如果需要收集用户profile则加载类库profile处理
 		if ($this->enable_profiler === TRUE)
 		{
 			$CI->load->library('profiler');
@@ -525,6 +561,8 @@ class CI_Output {
 
 			// If the output data contains closing </body> and </html> tags
 			// we will remove them and add them back after we insert the profile data
+			// 如果输出数据中包含关闭的</body>和</html>
+			// 我们会先移除，等到收集用户profile之后再加上
 			$output = preg_replace('|</body>.*?</html>|is', '', $output, -1, $count).$CI->profiler->run();
 			if ($count > 0)
 			{
@@ -534,6 +572,7 @@ class CI_Output {
 
 		// Does the controller contain a function named _output()?
 		// If so send the output there.  Otherwise, echo it.
+		// 如果controller中包含有_output方法，我们将$output交给处理否则直接输出
 		if (method_exists($CI, '_output'))
 		{
 			$CI->_output($output);
@@ -541,6 +580,7 @@ class CI_Output {
 		else
 		{
 			echo $output; // Send it to the browser!
+			// 将其输出到浏览器
 		}
 
 		log_message('info', 'Final output sent to browser');
@@ -551,6 +591,7 @@ class CI_Output {
 
 	/**
 	 * Write Cache
+	 * 写缓存
 	 *
 	 * @param	string	$output	Output data to cache
 	 * @return	void
@@ -559,8 +600,10 @@ class CI_Output {
 	{
 		$CI =& get_instance();
 		$path = $CI->config->item('cache_path');
+		// 配置未设置cache目录，默认应用下的cache目录
 		$cache_path = ($path === '') ? APPPATH.'cache/' : $path;
 
+		// 目录不存在或不可写，记录日志后直接返回
 		if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
 		{
 			log_message('error', 'Unable to write cache file: '.$cache_path);
@@ -583,14 +626,17 @@ class CI_Output {
 			}
 		}
 
+		// 缓存路径为$uri的md5，如果有key会存在多个缓存
 		$cache_path .= md5($uri);
 
+		// 文件无法打开，记录日志后直接返回
 		if ( ! $fp = @fopen($cache_path, 'w+b'))
 		{
 			log_message('error', 'Unable to write cache file: '.$cache_path);
 			return;
 		}
 
+		// 文件被锁，记录日志，关闭文件后返回
 		if ( ! flock($fp, LOCK_EX))
 		{
 			log_message('error', 'Unable to secure a file lock for file at: '.$cache_path);
@@ -601,6 +647,7 @@ class CI_Output {
 		// If output compression is enabled, compress the cache
 		// itself, so that we don't have to do that each time
 		// we're serving it
+		// 启动了输出压缩，则处理压缩缓存
 		if ($this->_compress_output === TRUE)
 		{
 			$output = gzencode($output);
@@ -614,11 +661,13 @@ class CI_Output {
 		$expire = time() + ($this->cache_expiration * 60);
 
 		// Put together our serialized info.
+		// cache_info 中保存了过期时间和headers
 		$cache_info = serialize(array(
 			'expire'	=> $expire,
 			'headers'	=> $this->headers
 		));
 
+		// 组成输出文件
 		$output = $cache_info.'ENDCI--->'.$output;
 
 		for ($written = 0, $length = self::strlen($output); $written < $length; $written += $result)
@@ -629,6 +678,7 @@ class CI_Output {
 			}
 		}
 
+		// 释放文件锁关闭文件
 		flock($fp, LOCK_UN);
 		fclose($fp);
 
@@ -643,6 +693,7 @@ class CI_Output {
 		log_message('debug', 'Cache file written: '.$cache_path);
 
 		// Send HTTP cache-control headers to browser to match file cache settings.
+		// 设置HTTP缓存控制相关的headers，并发送到浏览器便于检测cache是否过期
 		$this->set_cache_header($_SERVER['REQUEST_TIME'], $expire);
 	}
 
@@ -650,6 +701,7 @@ class CI_Output {
 
 	/**
 	 * Update/serve cached output
+	 * 读取缓存输出到浏览器
 	 *
 	 * @uses	CI_Config
 	 * @uses	CI_URI
@@ -663,8 +715,10 @@ class CI_Output {
 		$cache_path = ($CFG->item('cache_path') === '') ? APPPATH.'cache/' : $CFG->item('cache_path');
 
 		// Build the file path. The file name is an MD5 hash of the full URI
+		// 缓存文件是全URI的md5哈希，生成URI
 		$uri = $CFG->item('base_url').$CFG->item('index_page').$URI->uri_string;
 
+		// 如果缓存文件考虑到了查询字符串的key影响，需要将其拼接在当前uri中
 		if (($cache_query_string = $CFG->item('cache_query_string')) && ! empty($_SERVER['QUERY_STRING']))
 		{
 			if (is_array($cache_query_string))
@@ -730,6 +784,7 @@ class CI_Output {
 
 	/**
 	 * Delete cache
+	 * 删除缓存
 	 *
 	 * @param	string	$uri	URI string
 	 * @return	bool
@@ -753,6 +808,7 @@ class CI_Output {
 		{
 			$uri = $CI->uri->uri_string();
 
+			// 缓存考虑查询字符串情况下，拼接$uri
 			if (($cache_query_string = $CI->config->item('cache_query_string')) && ! empty($_SERVER['QUERY_STRING']))
 			{
 				if (is_array($cache_query_string))
@@ -766,8 +822,10 @@ class CI_Output {
 			}
 		}
 
+		// 计算缓存路径的md5
 		$cache_path .= md5($CI->config->item('base_url').$CI->config->item('index_page').ltrim($uri, '/'));
 
+		// 删除缓存文件
 		if ( ! @unlink($cache_path))
 		{
 			log_message('error', 'Unable to delete cache file for '.$uri);
@@ -781,6 +839,7 @@ class CI_Output {
 
 	/**
 	 * Set Cache Header
+	 * 设置缓存相关的header
 	 *
 	 * Set the HTTP headers to match the server-side file cache settings
 	 * in order to reduce bandwidth.

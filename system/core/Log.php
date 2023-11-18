@@ -44,6 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  
 /**
  * Logging Class
+ * 日志类
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -55,6 +56,7 @@ class CI_Log {
 
 	/**
 	 * Path to save log files
+	 * 保存日志文件路径
 	 *
 	 * @var string
 	 */
@@ -62,6 +64,7 @@ class CI_Log {
 
 	/**
 	 * File permissions
+	 * 文件权限
 	 *
 	 * @var	int
 	 */
@@ -69,6 +72,7 @@ class CI_Log {
 
 	/**
 	 * Level of logging
+	 * 日志级别
 	 *
 	 * @var int
 	 */
@@ -83,6 +87,7 @@ class CI_Log {
 
 	/**
 	 * Format of timestamp for log files
+	 * 日志文件时间格式
 	 *
 	 * @var string
 	 */
@@ -90,6 +95,7 @@ class CI_Log {
 
 	/**
 	 * Filename extension
+	 * 文件扩展名
 	 *
 	 * @var	string
 	 */
@@ -97,6 +103,7 @@ class CI_Log {
 
 	/**
 	 * Whether or not the logger can write to the log files
+	 * 是否日志能否入日志文件
 	 *
 	 * @var bool
 	 */
@@ -104,10 +111,12 @@ class CI_Log {
 
 	/**
 	 * Predefined logging levels
+	 * 预定义日志级别
 	 *
 	 * @var array
 	 */
 	protected $_levels = array('ERROR' => 1, 'DEBUG' => 2, 'INFO' => 3, 'ALL' => 4);
+	// 级别：1错误，2调试，3信息，4全部
 
 	/**
 	 * mbstring.func_overload flag
@@ -120,6 +129,7 @@ class CI_Log {
 
 	/**
 	 * Class constructor
+	 * 初始类
 	 *
 	 * @return	void
 	 */
@@ -129,10 +139,13 @@ class CI_Log {
 
 		isset(self::$func_overload) OR self::$func_overload = (extension_loaded('mbstring') && ini_get('mbstring.func_overload'));
 
+		// 配置文件里如有设置文件路径取设置，否则默认为应用目录下logs
+		// 配置文件里如有设置文件后缀名取设置，否则默认为php
 		$this->_log_path = ($config['log_path'] !== '') ? $config['log_path'] : APPPATH.'logs/';
 		$this->_file_ext = (isset($config['log_file_extension']) && $config['log_file_extension'] !== '')
 			? ltrim($config['log_file_extension'], '.') : 'php';
 
+		// 文件如不存在则创建
 		file_exists($this->_log_path) OR mkdir($this->_log_path, 0755, TRUE);
 
 		if ( ! is_dir($this->_log_path) OR ! is_really_writable($this->_log_path))
@@ -165,6 +178,7 @@ class CI_Log {
 
 	/**
 	 * Write Log File
+	 * 写日志文件
 	 *
 	 * Generally this function will be called using the global log_message() function
 	 *

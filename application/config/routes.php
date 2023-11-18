@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
+| URI 路由配置
 | -------------------------------------------------------------------------
 | This file lets you re-map URI requests to specific controller functions.
 |

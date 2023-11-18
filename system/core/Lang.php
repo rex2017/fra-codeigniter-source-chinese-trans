@@ -44,6 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Language Class
+ * 语言类
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -55,6 +56,7 @@ class CI_Lang {
 
 	/**
 	 * List of translations
+	 * 翻译语言
 	 *
 	 * @var	array
 	 */
@@ -62,6 +64,7 @@ class CI_Lang {
 
 	/**
 	 * List of loaded language files
+	 * 加载语言文件
 	 *
 	 * @var	array
 	 */
@@ -69,6 +72,7 @@ class CI_Lang {
 
 	/**
 	 * Class constructor
+	 * 类初始化
 	 *
 	 * @return	void
 	 */
@@ -81,6 +85,7 @@ class CI_Lang {
 
 	/**
 	 * Load a language file
+	 * 加载语言文件
 	 *
 	 * @param	mixed	$langfile	Language file name
 	 * @param	string	$idiom		Language name (english, etc.)
@@ -92,6 +97,7 @@ class CI_Lang {
 	 */
 	public function load($langfile, $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
 	{
+		// 如果语言文件为一个数组，调自己
 		if (is_array($langfile))
 		{
 			foreach ($langfile as $value)
@@ -102,15 +108,19 @@ class CI_Lang {
 			return;
 		}
 
+		// 去掉语言文件的.php
 		$langfile = str_replace('.php', '', $langfile);
 
+		// 开启后缀，组装_lang
 		if ($add_suffix === TRUE)
 		{
 			$langfile = preg_replace('/_lang$/', '', $langfile).'_lang';
 		}
 
+		// 组装后缀.php
 		$langfile .= '.php';
 
+		// 判断语言是否合法输入
 		if (empty($idiom) OR ! preg_match('/^[a-z_-]+$/i', $idiom))
 		{
 			$config =& get_config();

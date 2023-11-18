@@ -96,6 +96,7 @@ class MY_Lang extends CI_Lang {
 	
 	/**
 	 * Load a language file, with fallback to english.
+	 * 导入语言文件，对应英语。
 	 *
 	 * @param	mixed	$langfile	Language file name
 	 * @param	string	$idiom		Language name (english, etc.)

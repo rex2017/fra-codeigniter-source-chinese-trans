@@ -38,7 +38,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * DB驱动核心，加载到DB.php
+ * DB驱动核心，加载到DB.php   174行
  */
 
 /**
@@ -58,6 +58,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Data Source Name / Connect string
+	 * DSN数据源连接
 	 *
 	 * @var	string
 	 */
@@ -65,6 +66,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Username
+	 * 用户名
 	 *
 	 * @var	string
 	 */
@@ -72,6 +74,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Password
+	 * 密码
 	 *
 	 * @var	string
 	 */
@@ -79,6 +82,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Hostname
+	 * 主机名
 	 *
 	 * @var	string
 	 */
@@ -86,6 +90,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Database name
+	 * 数据库名
 	 *
 	 * @var	string
 	 */
@@ -93,6 +98,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Database driver
+	 * 数据库驱动
 	 *
 	 * @var	string
 	 */
@@ -108,6 +114,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Table prefix
+	 * 表前缀
 	 *
 	 * @var	string
 	 */
@@ -115,6 +122,7 @@ abstract class CI_DB_driver {
 
 	/**
 	 * Character set
+	 * 字符，如utf8
 	 *
 	 * @var	string
 	 */

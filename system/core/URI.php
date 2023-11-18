@@ -38,13 +38,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * URI类主要处理地址字符串，将uri分解成对应的片断，存到segments数组中。
+ * URI地址解析类，主要处理地址字符串，将uri分解成对应的片断，存到segments数组中。
  * querystring分解后存到 $_GET数组，ROUTER路由类在之后解析路由动作中，也主要依靠URI的segments
  * 属性数组来获取当前上下文的请求URI信息。
  */
  
 /**
  * URI Class
+ * URI 类
  *
  * Parses URIs and determines routing
  *
@@ -99,11 +100,13 @@ class CI_URI {
 
 	/**
 	 * Class constructor
+	 * 类初始化
 	 *
 	 * @return	void
 	 */
 	public function __construct()
 	{
+		// 引入配置文件，config未先定义
 		$this->config =& load_class('Config', 'core');
 
 		// If query strings are enabled, we don't need to parse any segments.
@@ -113,9 +116,10 @@ class CI_URI {
 			$this->_permitted_uri_chars = $this->config->item('permitted_uri_chars');
 
 			// If it's a CLI request, ignore the configuration
+			// 如果来自于CLI客户端，
 			if (is_cli())
 			{
-				$uri = $this->_parse_argv();
+				$uri = $this->_parse_argv();		#进入子方法
 			}
 			else
 			{
@@ -290,7 +294,7 @@ class CI_URI {
 	protected function _parse_argv()
 	{
 		$args = array_slice($_SERVER['argv'], 1);
-		return $args ? implode('/', $args) : '';
+		return $args ? implode('/', $args) : '';	#把命令行数组打散并拼接起来
 	}
 
 	// --------------------------------------------------------------------

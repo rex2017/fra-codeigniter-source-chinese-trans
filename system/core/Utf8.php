@@ -38,11 +38,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * UTF8类，主要提供对UTF-8环境的支持
+ * UTF8编码转换类，主要提供对UTF-8环境的支持
  */
 
 /**
  * Utf8 Class
+ * Utf8 类
  *
  * Provides support for UTF-8 environments
  *

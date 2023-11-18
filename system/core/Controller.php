@@ -39,14 +39,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * 控制器基类文件
- * 这个类通过引入Loader，实现了模型和数据库的连接
+ * 在这个类里通过加载其他类，实现了模型和数据库的连接
  */
  
 /**
  * Application Controller Class
+ * 应用里控制器类
  *
  * This class object is the super class that every library in
  * CodeIgniter will be assigned to.
+ * 这个类是一个超级类，每个类都可以被分配到。
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -58,6 +60,7 @@ class CI_Controller {
 
 	/**
 	 * Reference to the CI singleton
+	 * 单例的引用
 	 *
 	 * @var	object
 	 */
@@ -89,7 +92,7 @@ class CI_Controller {
 			$this->$var =& load_class($class);
 		}
 
-		//load属性引入了Loader
+		//load属性引入了Loader，如果不这样做直接在应用的控制器里使用load_class也是可以，但就不是一个大对象了
 		$this->load =& load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
@@ -105,6 +108,7 @@ class CI_Controller {
 	 */
 	public static function &get_instance()
 	{
+		// 返回单例
 		return self::$instance;
 	}
 

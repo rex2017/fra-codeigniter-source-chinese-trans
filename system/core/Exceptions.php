@@ -49,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Exceptions Class
+ * 异常类
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -71,18 +72,18 @@ class CI_Exceptions {
 	 * @var	array
 	 */
 	public $levels = array(
-		E_ERROR			=>	'Error',
-		E_WARNING		=>	'Warning',
-		E_PARSE			=>	'Parsing Error',
-		E_NOTICE		=>	'Notice',
-		E_CORE_ERROR		=>	'Core Error',
-		E_CORE_WARNING		=>	'Core Warning',
-		E_COMPILE_ERROR		=>	'Compile Error',
-		E_COMPILE_WARNING	=>	'Compile Warning',
-		E_USER_ERROR		=>	'User Error',
-		E_USER_WARNING		=>	'User Warning',
-		E_USER_NOTICE		=>	'User Notice',
-		E_STRICT		=>	'Runtime Notice'
+		E_ERROR			=>	'Error',				#错误
+		E_WARNING		=>	'Warning',				#警告
+		E_PARSE			=>	'Parsing Error',		#解析错误
+		E_NOTICE		=>	'Notice',				#注意
+		E_CORE_ERROR		=>	'Core Error',		#核心错误
+		E_CORE_WARNING		=>	'Core Warning',		#核心警告
+		E_COMPILE_ERROR		=>	'Compile Error',	#编译错误
+		E_COMPILE_WARNING	=>	'Compile Warning',	#编译警告
+		E_USER_ERROR		=>	'User Error',		#使用错误
+		E_USER_WARNING		=>	'User Warning',		#使用警告
+		E_USER_NOTICE		=>	'User Notice',		#使用注意
+		E_STRICT		=>	'Runtime Notice'		#运行注意
 	);
 
 	/**
@@ -100,6 +101,7 @@ class CI_Exceptions {
 
 	/**
 	 * Exception Logger
+	 * 记录异常
 	 *
 	 * Logs PHP generated error messages
 	 *
@@ -153,6 +155,7 @@ class CI_Exceptions {
 
 	/**
 	 * General Error Page
+	 * 普通错误
 	 *
 	 * Takes an error message as input (either as a string or an array)
 	 * and displays it using the specified template.

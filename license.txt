@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2014 - 2019, British Columbia Institute of Technology
+Copyright (c) 2019 - 2022, CodeIgniter Foundation
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,5 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-该软件是按“原样”提供的，没有任务形式的担保，明示或隐含的，包含但不限于适销性保证，适用于特定目的和不侵权。

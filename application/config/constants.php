@@ -9,9 +9,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | If set to TRUE, a backtrace will be displayed along with php errors. If
 | error_reporting is disabled, the backtrace will not display, regardless
 | of this setting
+| 返回php的错误提示
 |
 */
-defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
+defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);	#显示调试跟踪
 
 /*
 |--------------------------------------------------------------------------
@@ -24,12 +25,13 @@ defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
 | certain environments (Apache running a separate process for each
 | user, PHP under CGI with Apache suEXEC, etc.).  Octal values should
 | always be used to set the mode correctly.
+| 文件和目录的读写权限设置
 |
 */
-defined('FILE_READ_MODE')  OR define('FILE_READ_MODE', 0644);
-defined('FILE_WRITE_MODE') OR define('FILE_WRITE_MODE', 0666);
-defined('DIR_READ_MODE')   OR define('DIR_READ_MODE', 0755);
-defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
+defined('FILE_READ_MODE')  OR define('FILE_READ_MODE', 0644);		#文件读模式
+defined('FILE_WRITE_MODE') OR define('FILE_WRITE_MODE', 0666);		#文件写模式
+defined('DIR_READ_MODE')   OR define('DIR_READ_MODE', 0755);		#目录读模式
+defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);		#目录写模式
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,7 @@ defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
 |--------------------------------------------------------------------------
 |
 | These modes are used when working with fopen()/popen()
+| 当使用fopen时模式设置
 |
 */
 defined('FOPEN_READ')                           OR define('FOPEN_READ', 'rb');
@@ -73,13 +76,13 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREA
 |       http://tldp.org/LDP/abs/html/exitcodes.html
 |
 */
-defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors
-defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error
-defined('EXIT_CONFIG')         OR define('EXIT_CONFIG', 3); // configuration error
-defined('EXIT_UNKNOWN_FILE')   OR define('EXIT_UNKNOWN_FILE', 4); // file not found
-defined('EXIT_UNKNOWN_CLASS')  OR define('EXIT_UNKNOWN_CLASS', 5); // unknown class
-defined('EXIT_UNKNOWN_METHOD') OR define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
-defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user input
-defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
+defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors 无错误
+defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error 一般错误
+defined('EXIT_CONFIG')         OR define('EXIT_CONFIG', 3); // configuration error 配置错误
+defined('EXIT_UNKNOWN_FILE')   OR define('EXIT_UNKNOWN_FILE', 4); // file not found	文件未找到
+defined('EXIT_UNKNOWN_CLASS')  OR define('EXIT_UNKNOWN_CLASS', 5); // unknown class	未知类
+defined('EXIT_UNKNOWN_METHOD') OR define('EXIT_UNKNOWN_METHOD', 6); // unknown class member	未知方法
+defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user input	无效用户输入
+defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error	数据库错误
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code

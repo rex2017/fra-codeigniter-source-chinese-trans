@@ -38,11 +38,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * 数据库默认引入文件，加载到core/Loader.php
+ * 数据库默认引入文件，加载到core/Loader.php，通过方法database
  */
 
 /**
  * Initialize the database
+ * 初始化数据库
  *
  * @category	Database
  * @author	EllisLab Dev Team
@@ -64,6 +65,7 @@ function &DB($params = '', $query_builder_override = NULL)
 			show_error('The configuration file database.php does not exist.');
 		}
 
+		// 加载数据库配置文件
 		include($file_path);
 
 		// Make packages contain database config files,
@@ -196,6 +198,7 @@ function &DB($params = '', $query_builder_override = NULL)
 	}
 
 	// Load the DB driver
+	// 引入对应在DB驱动，如mysqli
 	$driver_file = BASEPATH.'database/drivers/'.$params['dbdriver'].'/'.$params['dbdriver'].'_driver.php';
 
 	file_exists($driver_file) OR show_error('Invalid DB driver');

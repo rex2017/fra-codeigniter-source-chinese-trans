@@ -38,13 +38,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * 定义了一系列的全局函数，加载入CodeIgniter.php
+ * 定义了一系列的全局函数，加载入CodeIgniter.php 96
  * 一般来说，全局函数具有最高的加载优先权，因此大多数的框架中 BootStrap引导文件都会最先引入
  * 相当于对php内置的函数进行一优化和补充
  */
 
 /**
  * Common Functions
+ * 公共函数
  *
  * Loads the base classes and executes the request.
  *
@@ -57,7 +58,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-//001,判断php版本是否满足框架
+//001,判断php版本是否满足框架,为什么不是is_php_version
 if ( ! function_exists('is_php'))
 {
 	/**
@@ -74,7 +75,7 @@ if ( ! function_exists('is_php'))
 
 		if ( ! isset($_is_php[$version]))
 		{
-			//环境版本比需要版本大时，返回TRUE
+			//环境版本比需要版本大或相等时，返回TRUE
 			$_is_php[$version] = version_compare(PHP_VERSION, $version, '>=');
 		}
 
@@ -101,6 +102,7 @@ if ( ! function_exists('is_really_writable'))
 	function is_really_writable($file)
 	{
 		// If we're on a Unix server with safe_mode off we call is_writable
+		// 如果是Unix服务器且未开安全模式即可读
 		if (DIRECTORY_SEPARATOR === '/' && (is_php('5.4') OR ! ini_get('safe_mode')))
 		{
 			return is_writable($file);
@@ -139,21 +141,25 @@ if ( ! function_exists('load_class'))
 {
 	/**
 	 * Class registry
+	 * 类注册，这是一个神奇的类，使用相当频繁
 	 *
 	 * This function acts as a singleton. If the requested class does not
 	 * exist it is instantiated and set to a static variable. If it has
 	 * previously been instantiated the variable is returned.
+	 * 以单例模式执行，如果请求的类不存在则设置一个静态变量。
 	 *
-	 * @param	string	the class name being requested
-	 * @param	string	the directory where the class should be found
-	 * @param	mixed	an optional argument to pass to the class constructor
+	 * @param	string	the class name being requested   类名
+	 * @param	string	the directory where the class should be found	目录
+	 * @param	mixed	an optional argument to pass to the class constructor	结构化时传入参数
 	 * @return	object
 	 */
 	function &load_class($class, $directory = 'libraries', $param = NULL)
 	{
+		// 这是一个静态变量
 		static $_classes = array();
 
 		// Does the class exist? If so, we're done...
+		// 如果存在直接返回
 		if (isset($_classes[$class]))
 		{
 			return $_classes[$class];
@@ -163,15 +169,16 @@ if ( ! function_exists('load_class'))
 
 		// Look for the class first in the local application/libraries folder
 		// then in the native system/libraries folder
+		// 先从app再从system里找这个类文件
 		foreach (array(APPPATH, BASEPATH) as $path)
 		{
 			if (file_exists($path.$directory.'/'.$class.'.php'))
 			{
-				$name = 'CI_'.$class;
+				$name = 'CI_'.$class;		#框架自动把类名加上CI_前缀
 
 				if (class_exists($name, FALSE) === FALSE)
 				{
-					//引入类文件，会加载入应用自己的类文件、框架自带的类文件，全凭这一条广开语句
+					// 引入类文件，会加载入应用自己的类文件、框架自带的类文件，全凭这一条语句
 					require_once($path.$directory.'/'.$class.'.php');
 				}
 
@@ -180,17 +187,20 @@ if ( ! function_exists('load_class'))
 		}
 
 		// Is the request a class extension? If so we load it too
+		// 加载自定义前缀扩展类，如MY_
 		if (file_exists(APPPATH.$directory.'/'.config_item('subclass_prefix').$class.'.php'))
 		{
 			$name = config_item('subclass_prefix').$class;
 
 			if (class_exists($name, FALSE) === FALSE)
 			{
+				// 再次引入类文件，来自于应用里的类
 				require_once(APPPATH.$directory.'/'.$name.'.php');
 			}
 		}
 
 		// Did we find the class?
+		// 没有得到类名
 		if ($name === FALSE)
 		{
 			// Note: We use exit() rather than show_error() in order to avoid a
@@ -201,6 +211,7 @@ if ( ! function_exists('load_class'))
 		}
 
 		// Keep track of what we just loaded
+		// 保持跟踪刚刚加载的类
 		is_loaded($class);
 
 		//前面加载的类文件，在这里进行类的实例化，这个设计比较巧妙
@@ -219,20 +230,22 @@ if ( ! function_exists('is_loaded'))
 	/**
 	 * Keeps track of which libraries have been loaded. This function is
 	 * called by the load_class() function above
+	 * 保持跟踪加载的类，这个方法被会003调用
 	 *
 	 * @param	string
 	 * @return	array
 	 */
 	function &is_loaded($class = '')
 	{
+		// 静态变量
 		static $_is_loaded = array();
 
 		if ($class !== '')
 		{
-			$_is_loaded[strtolower($class)] = $class;
+			$_is_loaded[strtolower($class)] = $class;	#类名称转小写
 		}
 
-		//不传值时直接返回已加载类的数组，有传值时记录下标并赋值后返回新数组
+		// 不传值时直接返回已加载类的数组，有传值时记录下标并赋值后返回新数组
 		return $_is_loaded;
 	}
 }
@@ -262,13 +275,13 @@ if ( ! function_exists('get_config'))
 			if (file_exists($file_path))
 			{
 				$found = TRUE;
-				require($file_path);
+				require($file_path);		#引入配置文件并得到$config的值
 			}
 
 			// Is the config file in the environment folder?
 			if (file_exists($file_path = APPPATH.'config/'.ENVIRONMENT.'/config.php'))
 			{
-				require($file_path);
+				require($file_path);		#再次引入配置文件并得到$config的值，如果下标有重复替换掉
 			}
 			elseif ( ! $found)
 			{
@@ -314,6 +327,7 @@ if ( ! function_exists('config_item'))
 		if (empty($_config))
 		{
 			// references cannot be directly assigned to static variables, so we use an array
+			// 引用不能直接赋值到变量，使用数组
 			$_config[0] =& get_config();
 		}
 
@@ -323,6 +337,7 @@ if ( ! function_exists('config_item'))
 
 // ------------------------------------------------------------------------
 
+// 007得到mimes
 if ( ! function_exists('get_mimes'))
 {
 	/**
@@ -352,6 +367,7 @@ if ( ! function_exists('get_mimes'))
 
 // ------------------------------------------------------------------------
 
+// 008是否https
 if ( ! function_exists('is_https'))
 {
 	/**
@@ -383,6 +399,7 @@ if ( ! function_exists('is_https'))
 
 // ------------------------------------------------------------------------
 
+// 009是否客户端
 if ( ! function_exists('is_cli'))
 {
 
@@ -401,6 +418,7 @@ if ( ! function_exists('is_cli'))
 
 // ------------------------------------------------------------------------
 
+// 010显示错误
 if ( ! function_exists('show_error'))
 {
 	/**
@@ -438,6 +456,7 @@ if ( ! function_exists('show_error'))
 
 // ------------------------------------------------------------------------
 
+// 011显示404
 if ( ! function_exists('show_404'))
 {
 	/**
@@ -461,6 +480,7 @@ if ( ! function_exists('show_404'))
 
 // ------------------------------------------------------------------------
 
+// 012记录日志
 if ( ! function_exists('log_message'))
 {
 	/**
@@ -468,6 +488,7 @@ if ( ! function_exists('log_message'))
 	 *
 	 * We use this as a simple mechanism to access the logging
 	 * class and send messages to be logged.
+	 * 用一个简单的调用Log写日志 
 	 *
 	 * @param	string	the error level: 'error', 'debug' or 'info'
 	 * @param	string	the error message
@@ -489,6 +510,7 @@ if ( ! function_exists('log_message'))
 
 // ------------------------------------------------------------------------
 
+// 013设置头状态
 if ( ! function_exists('set_status_header'))
 {
 	/**
@@ -517,7 +539,7 @@ if ( ! function_exists('set_status_header'))
 				100	=> 'Continue',
 				101	=> 'Switching Protocols',
 
-				200	=> 'OK',
+				200	=> 'OK',			#OK
 				201	=> 'Created',
 				202	=> 'Accepted',
 				203	=> 'Non-Authoritative Information',
@@ -533,11 +555,11 @@ if ( ! function_exists('set_status_header'))
 				305	=> 'Use Proxy',
 				307	=> 'Temporary Redirect',
 
-				400	=> 'Bad Request',
-				401	=> 'Unauthorized',
+				400	=> 'Bad Request',	#错误的请求
+				401	=> 'Unauthorized',	#未经授权
 				402	=> 'Payment Required',
 				403	=> 'Forbidden',
-				404	=> 'Not Found',
+				404	=> 'Not Found',		#不存在
 				405	=> 'Method Not Allowed',
 				406	=> 'Not Acceptable',
 				407	=> 'Proxy Authentication Required',
@@ -557,13 +579,13 @@ if ( ! function_exists('set_status_header'))
 				429	=> 'Too Many Requests',
 				431	=> 'Request Header Fields Too Large',
 
-				500	=> 'Internal Server Error',
+				500	=> 'Internal Server Error',	#内部服务器错误
 				501	=> 'Not Implemented',
-				502	=> 'Bad Gateway',
-				503	=> 'Service Unavailable',
-				504	=> 'Gateway Timeout',
+				502	=> 'Bad Gateway',			#错误网关
+				503	=> 'Service Unavailable',	#服务不可用
+				504	=> 'Gateway Timeout',		#网关超时
 				505	=> 'HTTP Version Not Supported',
-				511	=> 'Network Authentication Required',
+				511	=> 'Network Authentication Required',	#需要网络身份验证
 			);
 
 			if (isset($stati[$code]))
@@ -590,6 +612,7 @@ if ( ! function_exists('set_status_header'))
 
 // --------------------------------------------------------------------
 
+// 014子方法error_handler
 if ( ! function_exists('_error_handler'))
 {
 	/**
@@ -652,6 +675,7 @@ if ( ! function_exists('_error_handler'))
 
 // ------------------------------------------------------------------------
 
+// 015子方法exception_handler
 if ( ! function_exists('_exception_handler'))
 {
 	/**
@@ -682,6 +706,7 @@ if ( ! function_exists('_exception_handler'))
 
 // ------------------------------------------------------------------------
 
+// 016子方法shutdown_handler
 if ( ! function_exists('_shutdown_handler'))
 {
 	/**
@@ -710,6 +735,7 @@ if ( ! function_exists('_shutdown_handler'))
 
 // --------------------------------------------------------------------
 
+// 017移除字符
 if ( ! function_exists('remove_invisible_characters'))
 {
 	/**
@@ -749,6 +775,7 @@ if ( ! function_exists('remove_invisible_characters'))
 
 // ------------------------------------------------------------------------
 
+// 018html转义
 if ( ! function_exists('html_escape'))
 {
 	/**
@@ -781,6 +808,7 @@ if ( ! function_exists('html_escape'))
 
 // ------------------------------------------------------------------------
 
+// 019子方法字付串属性
 if ( ! function_exists('_stringify_attributes'))
 {
 	/**
@@ -820,6 +848,7 @@ if ( ! function_exists('_stringify_attributes'))
 
 // ------------------------------------------------------------------------
 
+// 020方法不可用
 if ( ! function_exists('function_usable'))
 {
 	/**

@@ -291,16 +291,17 @@ switch (ENVIRONMENT)
 		exit(3); // EXIT_CONFIG
 	}
 
-	//APP路径，即为application目录
+	// APP路径，即为application目录
 	define('APPPATH', $application_folder.DIRECTORY_SEPARATOR);
 
 	// The path to the "views" directory
 	// 验证视图 view文件目录的正确性
+	// view_folder未配置情况
 	if ( ! isset($view_folder[0]) && is_dir(APPPATH.'views'.DIRECTORY_SEPARATOR))
 	{
 		$view_folder = APPPATH.'views';
 	}
-	elseif (is_dir($view_folder))
+	elseif (is_dir($view_folder))		// view_folder有配置情况
 	{
 		if (($_temp = realpath($view_folder)) !== FALSE)
 		{

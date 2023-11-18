@@ -44,6 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  
 /**
  * Security Class
+ * 安全类
  *
  * @package		CodeIgniter
  * @subpackage	Libraries

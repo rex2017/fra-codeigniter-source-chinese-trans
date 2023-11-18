@@ -65,6 +65,7 @@ if ( ! function_exists('mb_strlen'))
 {
 	/**
 	 * mb_strlen()
+	 * 返回字符串的长度
 	 *
 	 * WARNING: This function WILL fall-back to strlen()
 	 * if iconv is not available!
@@ -78,6 +79,7 @@ if ( ! function_exists('mb_strlen'))
 	{
 		if (ICONV_ENABLED === TRUE)
 		{
+			// 转换前需要先转码
 			return iconv_strlen($str, isset($encoding) ? $encoding : config_item('charset'));
 		}
 
@@ -92,6 +94,7 @@ if ( ! function_exists('mb_strpos'))
 {
 	/**
 	 * mb_strpos()
+	 * 返回字符串的位置
 	 *
 	 * WARNING: This function WILL fall-back to strpos()
 	 * if iconv is not available!
@@ -121,6 +124,7 @@ if ( ! function_exists('mb_substr'))
 {
 	/**
 	 * mb_substr()
+	 * 字符串截取
 	 *
 	 * WARNING: This function WILL fall-back to substr()
 	 * if iconv is not available.

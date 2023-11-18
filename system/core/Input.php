@@ -49,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Input Class
+ * 输入类
  *
  * Pre-processes global input data for security
  *
@@ -62,6 +63,7 @@ class CI_Input {
 
 	/**
 	 * IP address of the current user
+	 * 当前用户的IP地址
 	 *
 	 * @var	string
 	 */
@@ -69,6 +71,7 @@ class CI_Input {
 
 	/**
 	 * Allow GET array flag
+	 * 允许得到数组标记
 	 *
 	 * If set to FALSE, then $_GET will be set to an empty array.
 	 *
@@ -78,6 +81,7 @@ class CI_Input {
 
 	/**
 	 * Standardize new lines flag
+	 * 标准化标记
 	 *
 	 * If set to TRUE, then newlines are standardized.
 	 *
@@ -87,6 +91,7 @@ class CI_Input {
 
 	/**
 	 * Enable XSS flag
+	 * 启用XSS标记
 	 *
 	 * Determines whether the XSS filter is always active when
 	 * GET, POST or COOKIE data is encountered.
@@ -98,6 +103,7 @@ class CI_Input {
 
 	/**
 	 * Enable CSRF flag
+	 * 启用CSRF标记
 	 *
 	 * Enables a CSRF cookie token to be set.
 	 * Set automatically based on config setting.
@@ -108,6 +114,7 @@ class CI_Input {
 
 	/**
 	 * List of all HTTP request headers
+	 * HTTP 请求头
 	 *
 	 * @var array
 	 */
@@ -115,6 +122,7 @@ class CI_Input {
 
 	/**
 	 * Raw input stream data
+	 * 输入流数据
 	 *
 	 * Holds a cache of php://input contents
 	 *
@@ -139,6 +147,7 @@ class CI_Input {
 
 	/**
 	 * Class constructor
+	 * 类初始化
 	 *
 	 * Determines whether to globally enable the XSS processing
 	 * and whether to allow the $_GET array.
@@ -152,9 +161,11 @@ class CI_Input {
 		$this->_enable_csrf		= (config_item('csrf_protection') === TRUE);
 		$this->_standardize_newlines	= (bool) config_item('standardize_newlines');
 
+		// 加载安全类
 		$this->security =& load_class('Security', 'core');
 
 		// Do we need the UTF-8 class?
+		// 加载UTF-8类
 		if (UTF8_ENABLED === TRUE)
 		{
 			$this->uni =& load_class('Utf8', 'core');
@@ -176,6 +187,7 @@ class CI_Input {
 
 	/**
 	 * Fetch from array
+	 * 从数组里获取
 	 *
 	 * Internal method used to retrieve values from global arrays.
 	 *
@@ -355,6 +367,7 @@ class CI_Input {
 
 	/**
 	 * Set cookie
+	 * 设置cookie
 	 *
 	 * Accepts an arbitrary number of parameters (up to 7) or an associative
 	 * array in the first parameter containing all the values.
@@ -559,6 +572,7 @@ class CI_Input {
 
 	/**
 	 * Validate IP Address
+	 * 验证IP地址
 	 *
 	 * @param	string	$ip	IP address
 	 * @param	string	$which	IP protocol: 'ipv4' or 'ipv6'
@@ -598,12 +612,15 @@ class CI_Input {
 
 	/**
 	 * Sanitize Globals
+	 * 处理Globals
 	 *
 	 * Internal method serving for the following purposes:
+	 * 处理以下
 	 *
 	 *	- Unsets $_GET data, if query strings are not enabled
 	 *	- Cleans POST, COOKIE and SERVER data
 	 * 	- Standardizes newline characters to PHP_EOL
+	 *  处理GET、POST
 	 *
 	 * @return	void
 	 */

@@ -38,7 +38,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * 兼容hash处理，加载入CodeIgniter.php
+ * 兼容性hash处理，加载入CodeIgniter.php
  */
 
 /**
@@ -54,6 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
+// 版本大于5.6即返回，不需要处理
 if (is_php('5.6'))
 {
 	return;
@@ -65,6 +66,7 @@ if ( ! function_exists('hash_equals'))
 {
 	/**
 	 * hash_equals()
+	 * 哈希相等
 	 *
 	 * @link	http://php.net/hash_equals
 	 * @param	string	$known_string
@@ -91,6 +93,7 @@ if ( ! function_exists('hash_equals'))
 		$diff = 0;
 		for ($i = 0; $i < $length; $i++)
 		{
+			// 返回ASCII 
 			$diff |= ord($known_string[$i]) ^ ord($user_string[$i]);
 		}
 
@@ -100,6 +103,7 @@ if ( ! function_exists('hash_equals'))
 
 // ------------------------------------------------------------------------
 
+// 版本大于5.5即返回，下面不再执行，现在5.5以下的不多了
 if (is_php('5.5'))
 {
 	return;
@@ -111,6 +115,7 @@ if ( ! function_exists('hash_pbkdf2'))
 {
 	/**
 	 * hash_pbkdf2()
+	 * 生成所提供密码的 PBKDF2 密钥导出
 	 *
 	 * @link	http://php.net/hash_pbkdf2
 	 * @param	string	$algo

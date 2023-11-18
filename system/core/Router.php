@@ -47,6 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Router Class
+ * 路由类
  *
  * Parses URIs and determines routing
  *
@@ -60,6 +61,7 @@ class CI_Router {
 
 	/**
 	 * CI_Config class object
+	 * 配置类对象
 	 *
 	 * @var	object
 	 */
@@ -67,6 +69,7 @@ class CI_Router {
 
 	/**
 	 * List of routes
+	 * 保存从配置文件中得到的路由规则
 	 *
 	 * @var	array
 	 */
@@ -74,6 +77,7 @@ class CI_Router {
 
 	/**
 	 * Current class name
+	 * 当前类名称
 	 *
 	 * @var	string
 	 */
@@ -81,6 +85,7 @@ class CI_Router {
 
 	/**
 	 * Current method name
+	 * 当前的方法名称，默认为index
 	 *
 	 * @var	string
 	 */
@@ -88,6 +93,7 @@ class CI_Router {
 
 	/**
 	 * Sub-directory that contains the requested controller class
+	 * 包含请求的类和方法的子目录
 	 *
 	 * @var	string
 	 */
@@ -95,6 +101,7 @@ class CI_Router {
 
 	/**
 	 * Default controller (and method if specific)
+	 * 默认控制器类名称
 	 *
 	 * @var	string
 	 */
@@ -102,6 +109,7 @@ class CI_Router {
 
 	/**
 	 * Translate URI dashes
+	 * 转换UIR - _
 	 *
 	 * Determines whether dashes in controller & method segments
 	 * should be automatically replaced by underscores.
@@ -112,6 +120,7 @@ class CI_Router {
 
 	/**
 	 * Enable query strings flag
+	 * 开启query string 标志
 	 *
 	 * Determines whether to use GET parameters or segment URIs
 	 *
@@ -123,6 +132,7 @@ class CI_Router {
 
 	/**
 	 * Class constructor
+	 * 构造函数
 	 *
 	 * Runs the route mapping function.
 	 *
@@ -131,16 +141,21 @@ class CI_Router {
 	 */
 	public function __construct($routing = NULL)
 	{
+		// Config、URI对象作为路由类的属性
 		$this->config =& load_class('Config', 'core');
 		$this->uri =& load_class('URI', 'core');
 
+		//一定设置TRUE时才真正启用
 		$this->enable_query_strings = ( ! is_cli() && $this->config->item('enable_query_strings') === TRUE);
 
 		// If a directory override is configured, it has to be set before any dynamic routing logic
+		// 如果设置了包含目录，需要先进行设置set_directory
 		is_array($routing) && isset($routing['directory']) && $this->set_directory($routing['directory']);
+		// 开始调用路由解析，设置routes
 		$this->_set_routing();
 
 		// Set any routing overrides that may exist in the main index file
+		// 如果路由里设置了表示覆盖
 		if (is_array($routing))
 		{
 			empty($routing['controller']) OR $this->set_class($routing['controller']);
@@ -154,6 +169,7 @@ class CI_Router {
 
 	/**
 	 * Set route mapping
+	 * 进行路由解析映射
 	 *
 	 * Determines what should be served based on the URI request,
 	 * as well as any "routes" that have been set in the routing config file.
@@ -167,26 +183,29 @@ class CI_Router {
 		// default_controller would be empty ...
 		if (file_exists(APPPATH.'config/routes.php'))
 		{
-			include(APPPATH.'config/routes.php');
+			include(APPPATH.'config/routes.php');		#加载routes配置
 		}
 
 		if (file_exists(APPPATH.'config/'.ENVIRONMENT.'/routes.php'))
 		{
-			include(APPPATH.'config/'.ENVIRONMENT.'/routes.php');
+			include(APPPATH.'config/'.ENVIRONMENT.'/routes.php');		#加载routes配置2
 		}
 
 		// Validate & get reserved routes
+		// 得到转化后的路由
 		if (isset($route) && is_array($route))
 		{
 			isset($route['default_controller']) && $this->default_controller = $route['default_controller'];
 			isset($route['translate_uri_dashes']) && $this->translate_uri_dashes = $route['translate_uri_dashes'];
 			unset($route['default_controller'], $route['translate_uri_dashes']);
+			// 开始写入routes
 			$this->routes = $route;
 		}
 
 		// Are query strings enabled in the config file? Normally CI doesn't utilize query strings
 		// since URI segments are more search-engine friendly, but they can optionally be used.
 		// If this feature is enabled, we will gather the directory/class/method a little differently
+		// 开启query string模式时的处理
 		if ($this->enable_query_strings)
 		{
 			// If the directory is set at this time, it means an override exists, so skip the checks
@@ -231,6 +250,7 @@ class CI_Router {
 		}
 
 		// Is there anything to parse?
+		// 开始执行解析
 		if ($this->uri->uri_string !== '')
 		{
 			$this->_parse_routes();
@@ -245,6 +265,7 @@ class CI_Router {
 
 	/**
 	 * Set request route
+	 * 设置请求路由
 	 *
 	 * Takes an array of URI segments as input and sets the class/method
 	 * to be called.
@@ -292,6 +313,7 @@ class CI_Router {
 
 	/**
 	 * Set default controller
+	 * 设置默认控制器
 	 *
 	 * @return	void
 	 */
@@ -330,6 +352,7 @@ class CI_Router {
 
 	/**
 	 * Validate request
+	 * 验证请求，主要是识别目录d
 	 *
 	 * Attempts validate the URI request and determine the controller path.
 	 *
@@ -369,6 +392,7 @@ class CI_Router {
 
 	/**
 	 * Parse Routes
+	 * 解析路由
 	 *
 	 * Matches any routes that may exist in the config/routes.php file
 	 * against the URI to determine if the class/method need to be remapped.
@@ -378,6 +402,7 @@ class CI_Router {
 	protected function _parse_routes()
 	{
 		// Turn the segment array into a URI string
+		// 数组转化为字符串
 		$uri = implode('/', $this->uri->segments);
 
 		// Get HTTP verb
@@ -435,6 +460,7 @@ class CI_Router {
 
 	/**
 	 * Set class name
+	 * 设置用户请求对应的class
 	 *
 	 * @param	string	$class	Class name
 	 * @return	void
@@ -448,6 +474,7 @@ class CI_Router {
 
 	/**
 	 * Fetch the current class
+	 * 获取当前类的属性
 	 *
 	 * @deprecated	3.0.0	Read the 'class' property instead
 	 * @return	string
@@ -461,6 +488,7 @@ class CI_Router {
 
 	/**
 	 * Set method name
+	 * 设置方法
 	 *
 	 * @param	string	$method	Method name
 	 * @return	void
@@ -474,6 +502,7 @@ class CI_Router {
 
 	/**
 	 * Fetch the current method
+	 * 获取当前方法的属性
 	 *
 	 * @deprecated	3.0.0	Read the 'method' property instead
 	 * @return	string
@@ -487,6 +516,7 @@ class CI_Router {
 
 	/**
 	 * Set directory name
+	 * 设置目录
 	 *
 	 * @param	string	$dir	Directory name
 	 * @param	bool	$append	Whether we're appending rather than setting the full value
@@ -508,6 +538,7 @@ class CI_Router {
 
 	/**
 	 * Fetch directory
+	 * 获取目录的属性
 	 *
 	 * Feches the sub-directory (if any) that contains the requested
 	 * controller class.

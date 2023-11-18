@@ -43,6 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Config Class
+ * 配置类
  *
  * This class contains functions that enable config files to be managed
  *
@@ -56,6 +57,7 @@ class CI_Config {
 
 	/**
 	 * List of all loaded config values
+	 * 存储加载配置值
 	 *
 	 * @var	array
 	 */
@@ -63,6 +65,7 @@ class CI_Config {
 
 	/**
 	 * List of all loaded config files
+	 * 存储加载配置文件
 	 *
 	 * @var	array
 	 */
@@ -70,6 +73,7 @@ class CI_Config {
 
 	/**
 	 * List of paths to search when trying to load a config file.
+	 * 存储路径当加载一个配置文件时
 	 *
 	 * @used-by	CI_Loader
 	 * @var		array
@@ -80,6 +84,7 @@ class CI_Config {
 
 	/**
 	 * Class constructor
+	 * 类结构
 	 *
 	 * Sets the $config data from the primary config.php file as a class variable.
 	 *
@@ -90,8 +95,10 @@ class CI_Config {
 		$this->config =& get_config();
 
 		// Set the base_url automatically if none was provided
+		// 如果没有提供 base_url，自动设置
 		if (empty($this->config['base_url']))
 		{
+			// 解析SERVER_ADDR
 			if (isset($_SERVER['SERVER_ADDR']))
 			{
 				if (strpos($_SERVER['SERVER_ADDR'], ':') !== FALSE)
@@ -121,6 +128,7 @@ class CI_Config {
 
 	/**
 	 * Load Config File
+	 * 加载配置文件
 	 *
 	 * @param	string	$file			Configuration file name
 	 * @param	bool	$use_sections		Whether configuration values should be loaded into their own section

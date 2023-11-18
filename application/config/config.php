@@ -3,7 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
-| Base Site URL
+| Base Site URL、
+| 基本配置文件
 |--------------------------------------------------------------------------
 |
 | URL to your CodeIgniter root. Typically this will be your base URL,
@@ -163,6 +164,7 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 /*
 |--------------------------------------------------------------------------
 | Enable Query Strings
+| 开启查询字符串模式
 |--------------------------------------------------------------------------
 |
 | By default CodeIgniter uses search-engine friendly segment based URLs:
@@ -186,6 +188,8 @@ $config['enable_query_strings'] = FALSE;
 $config['controller_trigger'] = 'c';
 $config['function_trigger'] = 'm';
 $config['directory_trigger'] = 'd';
+// 当enable_query_strings=TRUE时，这3个配置才有效
+// 访问形式如：aaa.com/index.php?c=controller&m=function
 
 /*
 |--------------------------------------------------------------------------

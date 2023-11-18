@@ -43,6 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  
 /**
  * Model Class
+ * 模型类
  *
  * @package		CodeIgniter
  * @subpackage	Libraries

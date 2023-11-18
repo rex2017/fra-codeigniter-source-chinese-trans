@@ -45,8 +45,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  
 /**
  * Loader Class
+ * 加载类
  *
  * Loads framework components.
+ * 加载框架组件
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -233,9 +235,9 @@ class CI_Loader {
 	 *
 	 * Loads and instantiates models.
 	 *
-	 * @param	mixed	$model		Model name
-	 * @param	string	$name		An optional object name to assign to
-	 * @param	bool	$db_conn	An optional database connection configuration to initialize
+	 * @param	mixed	$model		Model name	模型名称
+	 * @param	string	$name		An optional object name to assign to  分配名称
+	 * @param	bool	$db_conn	An optional database connection configuration to initialize   数据连接
 	 * @return	object
 	 */
 	public function model($model, $name = '', $db_conn = FALSE)
@@ -321,7 +323,7 @@ class CI_Loader {
 			$class = config_item('subclass_prefix').'Model';
 			if (file_exists($app_path.$class.'.php'))
 			{
-				//真正的引入模型的代码
+				// 引入应用里core里的模型
 				require_once($app_path.$class.'.php');
 				if ( ! class_exists($class, FALSE))
 				{
@@ -342,6 +344,7 @@ class CI_Loader {
 					continue;
 				}
 
+				// 引入应用里models里的模型
 				require_once($mod_path.'models/'.$path.$model.'.php');
 				if ( ! class_exists($model, FALSE))
 				{
@@ -1301,8 +1304,10 @@ class CI_Loader {
 
 	/**
 	 * CI Autoloader
+	 * CI 自动加载
 	 *
 	 * Loads component listed in the config/autoload.php file.
+	 * 加载组件在config下配置好的列表
 	 *
 	 * @used-by	CI_Loader::initialize()
 	 * @return	void

@@ -50,8 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  
 /**
  * Hooks Class
+ * 钩子类
  *
  * Provides a mechanism to extend the base system without hacking.
+ * 提供一个在安全情况下扩展基本系统。
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -63,6 +65,7 @@ class CI_Hooks {
 
 	/**
 	 * Determines whether hooks are enabled
+	 * 定义钩子是否启用
 	 *
 	 * @var	bool
 	 */
@@ -70,6 +73,7 @@ class CI_Hooks {
 
 	/**
 	 * List of all hooks set in config/hooks.php
+	 * hooks配置列表
 	 *
 	 * @var	array
 	 */
@@ -77,6 +81,7 @@ class CI_Hooks {
 
 	/**
 	 * Array with class objects to use hooks methods
+	 * 钩子的对象数组
 	 *
 	 * @var array
 	 */
@@ -98,17 +103,19 @@ class CI_Hooks {
 	 */
 	public function __construct()
 	{
-		$CFG =& load_class('Config', 'core');
+		$CFG =& load_class('Config', 'core');		#引入CI_Config类
 		log_message('info', 'Hooks Class Initialized');
 
 		// If hooks are not enabled in the config file
 		// there is nothing else to do
+		// 得到配置文件的enable_hooks, $config['enable_hooks'] = FALSE;
 		if ($CFG->item('enable_hooks') === FALSE)
 		{
 			return;
 		}
 
 		// Grab the "hooks" definition file.
+		// 加载钩子配置文件
 		if (file_exists(APPPATH.'config/hooks.php'))
 		{
 			include(APPPATH.'config/hooks.php');
@@ -120,6 +127,7 @@ class CI_Hooks {
 		}
 
 		// If there are no hooks, we're done.
+		// 没有钩子返回
 		if ( ! isset($hook) OR ! is_array($hook))
 		{
 			return;

@@ -38,7 +38,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * CodeIgniter文件一共完成以下几种工作
+ * CodeIgniter这是一个核心文件，与框架同名，是一个初始化文件
+ * 一共完成以下几种工作
  * 1、加载框架常量、函数库以及框架初始化
  * 2、加载核心类组件
  * 3、路由的设置与判断
@@ -48,8 +49,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * System Initialization File
+ * 系统初始化文件
  *
  * Loads the base classes and executes the request.
+ * 加载基础类并执行请求
  *
  * @package		CodeIgniter
  * @subpackage	CodeIgniter
@@ -69,7 +72,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /*
  * ------------------------------------------------------
  *  Load the framework constants
- *  加载框架常量，这里支持按不同的环境配置constants.php文件
+ *  加载框架配置常量，这里支持按不同的环境配置constants.php文件
  * ------------------------------------------------------
  */
 	if (file_exists(APPPATH.'config/'.ENVIRONMENT.'/constants.php'))
@@ -82,7 +85,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		require_once(APPPATH.'config/constants.php');
 	}
 	
-	//备注：如果两个文件中都有这个设置，前面定义了，后面再引入也不会生效
+	//备注：如果两个文件中都有这个设置，前面定义了，后面会被替换
 
 /*
  * ------------------------------------------------------
@@ -96,6 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /*
  * ------------------------------------------------------
  * Security procedures
+ * 安全代码，当版本小于5.4时触发，现在用5.4的很少了
  * ------------------------------------------------------
  */
 
@@ -150,12 +154,11 @@ if ( ! is_php('5.4'))
  * ------------------------------------------------------
  */
 	set_error_handler('_error_handler');
-		# 设置错误处理，处理函数原型：function _error_handler($severity,
-		# $messages,$filepath,$line)
+		# 设置错误处理，处理函数原型Common里：function _error_handler($severity,$messages,$filepath,$line)
 	set_exception_handler('_exception_handler');
-		# 设置异常处理，处理函数原型：function _exception_handler($exception)
+		# 设置异常处理，处理函数原型Common里：function _exception_handler($exception)
 	register_shutdown_function('_shutdown_handler');
-		# 当页面被用户强制停止时、当程序代码运行超时时、当php代码执行完成时
+		# 当页面被用户强制停止时、当程序代码运行超时时、当php代码执行完成时，处理函数原型Common里：function _shutdown_handler()
 
 /*
  * ------------------------------------------------------
@@ -181,12 +184,14 @@ if ( ! is_php('5.4'))
 /*
  * ------------------------------------------------------
  *  Should we use a Composer autoloader?
+ *  如果启用了composer加载，这里需要处理
  * ------------------------------------------------------
  */
 	if ($composer_autoload = config_item('composer_autoload'))
 	{
 		if ($composer_autoload === TRUE)
 		{
+			// 需要加载vendor目录里的autoload.php，一般是没有
 			file_exists(APPPATH.'vendor/autoload.php')
 				? require_once(APPPATH.'vendor/autoload.php')
 				: log_message('error', '$config[\'composer_autoload\'] is set to TRUE but '.APPPATH.'vendor/autoload.php was not found.');
@@ -204,27 +209,25 @@ if ( ! is_php('5.4'))
 /*
  * ------------------------------------------------------
  *  Start the timer... tick tock tick tock...
+ *  开始计算时间，引用BM基准类
  * ------------------------------------------------------
  */
-	$BM =& load_class('Benchmark', 'core');
-	$BM->mark('total_execution_time_start');
-	$BM->mark('loading_time:_base_classes_start');
-	
-	// BM,指 Benchmark,是CI的基准组件，主要用于mark各种时间点、记录内存使用等参数，便于性能测试和追踪
+	$BM =& load_class('Benchmark', 'core');	
+	$BM->mark('total_execution_time_start');			# 总执行时间start
+	$BM->mark('loading_time:_base_classes_start');		# 加载基础类start
 
 /*
  * ------------------------------------------------------
  *  Instantiate the hooks class
+ *  钩子类EXT，CI的扩展组件，用于在不改变CI核心的基础上改变或者增加系统的核心运行功能。
  * ------------------------------------------------------
  */
 	$EXT =& load_class('Hooks', 'core');
-	// 钩子类EXT，CI的扩展组件，用于在不改变CI核心的基础上改变或者增加系统的核心运行功能。
-	// Hook 钩子允许你在系统运动的各个挂钩点 hook point 添加自定义的功能和跟踪，如pre_system，
-	// pre_controller,post_controller 等预定义的挂钩点。
 
 /*
  * ------------------------------------------------------
  *  Is there a "pre_system" hook?
+ *  准备挂载钩子
  * ------------------------------------------------------
  */
 	$EXT->call_hook('pre_system');
@@ -232,6 +235,7 @@ if ( ! is_php('5.4'))
 /*
  * ------------------------------------------------------
  *  Instantiate the config class
+ *  初始化配置文件
  * ------------------------------------------------------
  *
  * Note: It is important that Config is loaded first as
@@ -243,6 +247,7 @@ if ( ! is_php('5.4'))
 	// 配置类 CFG, Config 配置管理组件。主要用于加载配置文件、获取和配置项等。
 
 	// Do we have any manually set config items in the index.php file?
+	// 把配置文件存储为键值对
 	if (isset($assign_to_config) && is_array($assign_to_config))
 	{
 		foreach ($assign_to_config as $key => $value)
@@ -305,14 +310,14 @@ if ( ! is_php('5.4'))
 /*
  * ------------------------------------------------------
  *  Load compatibility features
- *  加载兼容方法
+ *  加载兼容方法，主要有以下几个，hash、mbstring、password、standard
  * ------------------------------------------------------
  */
-	require_once(BASEPATH.'core/compat/mbstring.php');
-	require_once(BASEPATH.'core/compat/hash.php');
-	require_once(BASEPATH.'core/compat/password.php');
-	require_once(BASEPATH.'core/compat/standard.php');
-
+	require_once(BASEPATH.'core/compat/mbstring.php');		# core/compat/
+	require_once(BASEPATH.'core/compat/hash.php');			# core/compat/
+	require_once(BASEPATH.'core/compat/password.php');		# core/compat/
+	require_once(BASEPATH.'core/compat/standard.php');		# core/compat/
+	
 /*
  * ------------------------------------------------------
  *  Instantiate the UTF-8 class
@@ -343,7 +348,7 @@ if ( ! is_php('5.4'))
  * ------------------------------------------------------
  */
 	$OUT =& load_class('Output', 'core');
-	// PUTPUT类，OUT, 最终的输出管理组件，掌管着CI的最终输出
+	// OUTPUT类, 最终的输出管理组件，掌管着CI的最终输出
 
 /*
  * ------------------------------------------------------
@@ -382,6 +387,7 @@ if ( ! is_php('5.4'))
 /*
  * ------------------------------------------------------
  *  Load the app controller and local controller
+ *  以上各个准备工作都准备好了，可以开始加载Controller了
  * ------------------------------------------------------
  *
  */
@@ -394,6 +400,8 @@ if ( ! is_php('5.4'))
 	 *
 	 * Returns current CI instance object
 	 *
+	 * 指向CI_Controller的引用，返回CI对象
+	 *
 	 * @return CI_Controller
 	 */
 	function &get_instance()
@@ -401,13 +409,14 @@ if ( ! is_php('5.4'))
 		return CI_Controller::get_instance();
 	}
 
+	// 加载应用的应里的core控制器，如果有的话，在实际应用中都放在controllers里一起了
 	if (file_exists(APPPATH.'core/'.$CFG->config['subclass_prefix'].'Controller.php'))
 	{
 		require_once APPPATH.'core/'.$CFG->config['subclass_prefix'].'Controller.php';
 	}
 
 	// Set a mark point for benchmarking
-	$BM->mark('loading_time:_base_classes_end');
+	$BM->mark('loading_time:_base_classes_end');		# 加载基础类end
 
 /*
  * ------------------------------------------------------
@@ -436,15 +445,17 @@ if ( ! is_php('5.4'))
  */
 
 	$e404 = FALSE;
-	$class = ucfirst($RTR->class);		#取出路由中的类名
-	$method = $RTR->method;				#取出路由中的方法
+	$class = ucfirst($RTR->class);		#取出RTR路由中的类名，首字母大写
+	$method = $RTR->method;				#取出RTR路由中的方法
 
+	// 如果控制器的类名为空或是控制器对应目录下不存在
 	if (empty($class) OR ! file_exists(APPPATH.'controllers/'.$RTR->directory.$class.'.php'))
 	{
 		$e404 = TRUE;
 	}
 	else
-	{
+	{	
+		// 加载控制器类文件，找到即加载进来了
 		require_once(APPPATH.'controllers/'.$RTR->directory.$class.'.php');
 
 		if ( ! class_exists($class, FALSE) OR $method[0] === '_' OR method_exists('CI_Controller', $method))
@@ -481,6 +492,7 @@ if ( ! is_php('5.4'))
 		}
 	}
 
+	// 开始补充加载
 	if ($e404)
 	{
 		if ( ! empty($RTR->routes['404_override']))
@@ -496,12 +508,14 @@ if ( ! is_php('5.4'))
 			{
 				if (file_exists(APPPATH.'controllers/'.$RTR->directory.$error_class.'.php'))
 				{
+					// 真正补充加载控制器
 					require_once(APPPATH.'controllers/'.$RTR->directory.$error_class.'.php');
 					$e404 = ! class_exists($error_class, FALSE);
 				}
 				// Were we in a directory? If so, check for a global override
 				elseif ( ! empty($RTR->directory) && file_exists(APPPATH.'controllers/'.$error_class.'.php'))
 				{
+					// 文件不存直接从控制器下面引入，可能是父类
 					require_once(APPPATH.'controllers/'.$error_class.'.php');
 					if (($e404 = ! class_exists($error_class, FALSE)) === FALSE)
 					{
@@ -552,6 +566,7 @@ if ( ! is_php('5.4'))
 	// Mark a start point so we can benchmark the controller
 	$BM->mark('controller_execution_time_( '.$class.' / '.$method.' )_start');
 
+	// 控制器生成实例
 	$CI = new $class();
 
 /*
@@ -566,6 +581,7 @@ if ( ! is_php('5.4'))
  *  Call the requested method
  * ------------------------------------------------------
  */
+	// 使用回调函数执行控制器时的方法
 	call_user_func_array(array(&$CI, $method), $params);
 
 	// Mark a benchmark end point
@@ -581,6 +597,7 @@ if ( ! is_php('5.4'))
 /*
  * ------------------------------------------------------
  *  Send the final rendered output to the browser
+ *  输出显示内容到显示器
  * ------------------------------------------------------
  */
 	if ($EXT->call_hook('display_override') === FALSE)

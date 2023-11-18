@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------
 | AUTO-LOADER
+| 自动加载
 | -------------------------------------------------------------------
 | This file specifies which systems should be loaded by default.
 |
@@ -27,6 +28,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | 5. Custom config files
 | 6. Language files
 | 7. Models
+|
+| 这些可以自动加载，包、类、驱动、帮助类、自定义配置、语言、模型
 |
 */
 
